@@ -8,7 +8,7 @@
     *       @note [RCR:Regulators] Configuration file Regulators
     */
 #pragma once
-#include "RCR_DevBoard_3_Setup.h"
+#include "BoardSelection.h"
 #if(CALC_REGULATOR == 1)
 
     /*!
@@ -52,7 +52,7 @@ void init_P_Regulator(P_Regulator Regulator);
           float pi_output_end;
     }PI_Regulator;
 
-void init_PI_Regulator(PI_Regulator Regulator);
+void Regulator_PI_Init(PI_Regulator Regulator);
 
     /*!
     *   @list PID_Regulator Settings
@@ -79,9 +79,8 @@ void init_PI_Regulator(PI_Regulator Regulator);
     }PID_Regulator;
 
     float EnginePWM;
-    PID_Regulator EngineReg;
-    void init_PID_Regulator(void);
+    void Regulator_PID_init(void);
 
-    void PID_Low_Level(void);
+    void RegulatorPIDLowLevel(void);
 
 #endif /*CALC_REGULATOR*/

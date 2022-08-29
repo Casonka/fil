@@ -22,13 +22,13 @@
     *           @list I2C_Slow - slow mode I2C
     *                 I2C_Fast - fast mode I2C
     */
-#define I2CSimpleConfigure(I2C, SPEED)                         {\
-    SetI2CPeriphDisable(I2C);                                   \
-    ConfI2CFreq(I2C,I2CDefaultFREQ);                            \
-    ConfI2CCCR(I2C, SPEED);                                     \
-    if(SPEED == I2C_Slow) ConfI2CTrise(I2C,RiseTimeDefaultSM);  \
-    if(SPEED == I2C_Fast) ConfI2CTrise(I2C,RiseTimeDefaultFM);  \
-    SetI2CPeriphEnable(I2C);                                    }
+    #define I2CSimpleConfigure(I2C, SPEED)                         {\
+        SetI2CPeriphDisable(I2C);                                   \
+        ConfI2CFreq(I2C,I2CDefaultFREQ);                            \
+        ConfI2CCCR(I2C, SPEED);                                     \
+        if(SPEED == I2C_Slow) ConfI2CTrise(I2C,RiseTimeDefaultSM);  \
+        if(SPEED == I2C_Fast) ConfI2CTrise(I2C,RiseTimeDefaultFM);  \
+        SetI2CPeriphEnable(I2C);                                    }
 
     /*!
     *   @brief I2CMasterConfigure(I2C,SPEED, ADDRESS) - configuration I2C in master mode
@@ -38,16 +38,16 @@
     *                 I2C_Fast - fast mode I2C
     *       @arg ADDRESS - Own address on bus I2C
     */
-#define I2CMasterConfigure(I2C, SPEED, ADDRESS)                {\
-    ConfI2CFreq(I2C,I2CDefaultFREQ);                            \
-    ConfI2CCCR(I2C, SPEED);                                     \
-    SetI2CPeriphDisable(I2C);                                   \
-    if(SPEED == I2C_Slow) { SetI2CMasterModeSlow(I2C);          \
-                           ConfI2CTrise(I2C,RiseTimeDefaultSM);}\
-    if(SPEED == I2C_Fast) {ConfI2CTrise(I2C,RiseTimeDefaultFM); \
-                          SetI2CMasterModeFast(I2C);}           \
-    SetI2CPeriphEnable(I2C);                                    \
-    ConfI2CAddress(I2C, ADDRESS);                               }
+    #define I2CMasterConfigure(I2C, SPEED, ADDRESS)                {\
+        ConfI2CFreq(I2C,I2CDefaultFREQ);                            \
+        ConfI2CCCR(I2C, SPEED);                                     \
+        SetI2CPeriphDisable(I2C);                                   \
+        if(SPEED == I2C_Slow) { SetI2CMasterModeSlow(I2C);          \
+                               ConfI2CTrise(I2C,RiseTimeDefaultSM);}\
+        if(SPEED == I2C_Fast) {ConfI2CTrise(I2C,RiseTimeDefaultFM); \
+                              SetI2CMasterModeFast(I2C);}           \
+        SetI2CPeriphEnable(I2C);                                    \
+        ConfI2CAddress(I2C, ADDRESS);                               }
 
     /*!
     *   @brief I2CSlaveConfigure() -
@@ -119,14 +119,24 @@ void I2C_ClearAllStats(I2C_TypeDef* I2Cx);
 bool I2C_SingleSend(I2C_TypeDef* I2Cx, uint8_t Byte, bool IsWrite);
 
 /*!
-*   @brief I2C_SingleSend(I2C_TypeDef* I2Cx, uint8_t *bufBytes) - Multiple Write on Bus IIC
+*   @brief I2C_MultipleSend(I2C_TypeDef* I2Cx, uint8_t *bufBytes) - Multiple Write on Bus IIC
 *       @arg I2Cx - number of target I2C
 *       @arg bufBytes - Sending buffer of values
 */
 uint16_t I2C_MultipleSend(I2C_TypeDef* I2Cx, uint8_t *bufBytes);
 
+/*!
+*   @brief I2C_SingleRead(I2C_TypeDef* I2Cx) - Single read data from I2C bus
+*       @arg I2Cx - number of I2C
+*/
 uint8_t I2C_SingleRead(I2C_TypeDef* I2Cx);
 
+/*!
+*   @brief I2C_MultipleRead(I2C_TypeDef* I2Cx, uint8_t *bufBytes) - Multiple Read on Bus IIC
+*       @arg I2Cx - number of target I2C
+*       @arg bufBytes - Sending buffer of values
+*       @return success received bytes
+*/
 uint16_t I2C_MultipleRead(I2C_TypeDef* I2Cx, uint8_t *bufBytes);
 #if(CALC_I2C_SCANNING == 1)
     #if(__configI2C_FindListSize > 0 )

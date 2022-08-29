@@ -8,7 +8,13 @@
     *       @note [FIL:TIM] TIM Source file.
     */
 #include "TIM.h"
-
+struct
+{
+    uint32_t Raw;
+    uint8_t seconds;
+    uint8_t minutes;
+    uint8_t hours;
+}Calendar;
 uint32_t globalTime = 0;
 
 /*!
@@ -21,6 +27,11 @@ void SysTick_Handler(void)
 
 //    CalcTimStatus(TIM5);
     globalTime++;
+    if(globalTime % 2000 == 0)
+    {
+    Calendar.Raw = RTC->TR;
+    RTC->ISR &= RTC_ISR_WUTF;
+    }
 }
 #if (FIL_CALC_TIM == 1)
 //---------------------------------------------------------//
@@ -103,12 +114,12 @@ void CalcTimStatus(TIM_TypeDef *TIMx)
     TIMStatus.Frequency = (TIMStatus.SourseClock / ((TIMx->PSC + 1) * TIMx->ARR));
 }
     /*!
-    *   @brief CalcTimPIDFrequency(TIM_TypeDef *TIMx, uint16_t freq) - Calculating Timer frequency
+    *   @brief CalcTimFrequency(TIM_TypeDef *TIMx, uint16_t freq) - Calculating Timer frequency
     *       @arg TIMx - number of timer
     *       @arg freq - necessary frequency
-    *           @note [FIL:TIM] Функция для расчета частоты работы прерывания по таймеру. Можно использовать для различных расчетов
+    *           @note [FIL:TIM] Функция для расчета частоты работы таймераы
     */
-void CalcTimPIDFrequency(TIM_TypeDef *TIMx, uint16_t freq)
+void CalcTimFrequency(TIM_TypeDef *TIMx, uint16_t freq)
 {
     CalcTimClockSourse(TIMx);
 
@@ -180,13 +191,13 @@ void CalcTimClockSourse(TIM_TypeDef *TIMx)
     {
         if(Duty >= 0)
         {
-            reset_pin(BTN1_DIR_PIN);
+            ResetPin(BTN1_DIR_PIN);
             SetPWM(BTN1_CCR,Duty);
             return true;
         }
         else
         {
-            set_pin(BTN1_DIR_PIN);
+            SetPin(BTN1_DIR_PIN);
             SetPWM(BTN1_CCR,Duty);
             return true;
         }
@@ -231,5 +242,19 @@ void CalcTimClockSourse(TIM_TypeDef *TIMx)
         float max_PWM = (float)(((Servo->ARR) * (*Servo).max_ms) / (*Servo).ms);
 
         *(*Servo).CCR = (uint32_t)(angle * ((max_PWM - min_PWM) / (*Servo).maxAngle) + min_PWM);
+    }
+
+static uint32_t startInterval;
+static uint32_t endInterval;
+    uint32_t StartMeas(void)
+    {
+        SetPin(LED_PIN);
+        return startInterval = globalTime;
+    }
+
+    uint32_t EndMeas(void)
+    {
+        ResetPin(LED_PIN);
+        return endInterval = (globalTime - startInterval);
     }
 #endif /*FIL_CALC_TIM*/

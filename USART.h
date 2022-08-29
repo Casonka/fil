@@ -13,8 +13,10 @@
 #if (FIL_USART == 1)
 
     /*!
-    *   @brief USARTReceiverConfigure() - configuration timer with encoder interface
-    *       @arg
+    *   @brief USARTReceiverConfigure(USART,BAUD,RXInterrupt) - receiver config
+    *       @arg USART - number of UART/USART interface
+    *       @arg BAUD - speed of transmission in bauds
+    *       @arg RXInterrupt - interrupt when RxE = 1
     */
     #define USARTReceiverConfigure(USART,BAUD,RXInterrupt){\
         ConfUSARTBaud(USART,BAUD);                         \
@@ -23,8 +25,10 @@
         USARTStart(USART);                                 }
 
     /*!
-    *   @brief USARTTransmitterConfigure() - configuration timer with encoder interface
-    *       @arg
+    *   @brief USARTTransmitterConfigure(USART,BAUD,TXInterrupt) - transmitter config
+    *       @arg USART - number of UART/USART interface
+    *       @arg BAUD - speed of transmission in bauds
+    *       @arg TXInterrupt - interrupt when TxE = 1
     */
     #define USARTTransmitterConfigure(USART,BAUD,TXInterrupt){\
         ConfUSARTBaud(USART,BAUD);                            \
@@ -33,8 +37,11 @@
         USARTStart(USART);                                    }
 
     /*!
-    *   @brief USARTBothConfigure() - configuration timer with encoder interface
-    *       @arg
+    *   @brief USARTBothConfigure(USART,BAUD,TXInterrupt, RXInterrupt) - both config
+    *       @arg USART - number of UART/USART interface
+    *       @arg BAUD - speed of transmission in bauds
+    *       @arg RXInterrupt - interrupt when RxE = 1
+    *       @arg TXInterrupt - interrupt when TxE = 1
     */
     #define USARTBothConfigure(USART,BAUD,TXInterrupt, RXInterrupt){\
         ConfUSARTBaud(USART,BAUD);                                  \
@@ -74,6 +81,12 @@
 #if (FIL_CALC_USART == 1)
 //---------------------------------------Calculating---------------------------------------------------//
 
+/*!
+*   @brief CalcUSARTBaudrate(USART_TypeDef *USARTx, uint32_t BaudRate) - automatic calculating bauds
+*       @arg USARTx - number of UART/USART
+*       @arg BauRate - necessary baudrate
+*       @return uint16_t baudrate
+*/
 uint16_t CalcUSARTBaudrate(USART_TypeDef *USARTx, uint32_t BaudRate);
 
 #endif /*FIL_CALC_USART*/

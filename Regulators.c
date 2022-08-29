@@ -18,7 +18,7 @@
 PID_Regulator EngineReg;
 float Motor_Coord;
 float EnginePWM = 0.0;
-void init_PID_Regulator(void)  // инициализация регуляторов
+void Regulator_PID_init(void)  // инициализация регуляторов
 {
 
     /*!
@@ -102,7 +102,7 @@ int16_t EncData;
 /*!
 *   @brief PID_Low_Level(void) - General PID calculating engine
 */
-void PID_Low_Level(void)
+void RegulatorPIDLowLevel(void)
 {
     EncData = ((int16_t)*ENCODER1_CNT);
     if(EnginePWM > 1.0) EnginePWM = 1.0;

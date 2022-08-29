@@ -11,15 +11,12 @@
 //--------------------------------------------------------------------------------//
 //---------------------------ADC Interrupts---------------------------------------//
 //--------------------------------------------------------------------------------//
-float distance = 0.0;
 /*!
 *   @brief ADC_IRQHandler(void)
 */
 void ADC_IRQHandler(void)
 {
-//    AnalogReadRegular();
-//    AnalogReadInjected(ADC1);
-//    ADC1->SR = 0;
+
 }
 #if(FIL_ADC == 1)
     __attribute__((unused)) static uint8_t ADC_CurrentTabs[10] =   {ADC_IN_0,
@@ -52,8 +49,6 @@ void ADC_Init(ADC_TypeDef *ADCx)
     ConfADCResolution(ADCx,2);
 #elif(__configADC_RESOLUTION == 6)
     ConfADCResolution(ADCx,3);
-#else
-#error Invalid argument Resolution ADC
 #endif /*__configADC_RESOLUTION*/
 ///////////////////////////////////////////
 #ifdef STM32F401xx
@@ -140,44 +135,44 @@ static void SetMulriplexer_State(uint16_t State)
     switch(State)
     {
         case 0:
-            reset_pin(MULPLXA_PIN);
-            reset_pin(MULPLXB_PIN);
-            reset_pin(MULPLXC_PIN);
+            ResetPin(MULPLXA_PIN);
+            ResetPin(MULPLXB_PIN);
+            ResetPin(MULPLXC_PIN);
             break;
         case 1:
-            set_pin(MULPLXA_PIN);
-            reset_pin(MULPLXB_PIN);
-            reset_pin(MULPLXC_PIN);
+            SetPin(MULPLXA_PIN);
+            ResetPin(MULPLXB_PIN);
+            ResetPin(MULPLXC_PIN);
             break;
         case 2:
-            reset_pin(MULPLXA_PIN);
-            set_pin(MULPLXB_PIN);
-            reset_pin(MULPLXC_PIN);
+            ResetPin(MULPLXA_PIN);
+            SetPin(MULPLXB_PIN);
+            ResetPin(MULPLXC_PIN);
             break;
         case 3:
-            set_pin(MULPLXA_PIN);
-            set_pin(MULPLXB_PIN);
-            reset_pin(MULPLXC_PIN);
+            SetPin(MULPLXA_PIN);
+            SetPin(MULPLXB_PIN);
+            ResetPin(MULPLXC_PIN);
             break;
         case 4:
-            reset_pin(MULPLXA_PIN);
-            reset_pin(MULPLXB_PIN);
-            set_pin(MULPLXC_PIN);
+            ResetPin(MULPLXA_PIN);
+            ResetPin(MULPLXB_PIN);
+            SetPin(MULPLXC_PIN);
             break;
         case 5:
-            set_pin(MULPLXA_PIN);
-            reset_pin(MULPLXB_PIN);
-            set_pin(MULPLXC_PIN);
+            SetPin(MULPLXA_PIN);
+            ResetPin(MULPLXB_PIN);
+            SetPin(MULPLXC_PIN);
             break;
         case 6:
-            reset_pin(MULPLXA_PIN);
-            set_pin(MULPLXB_PIN);
-            set_pin(MULPLXC_PIN);
+            ResetPin(MULPLXA_PIN);
+            SetPin(MULPLXB_PIN);
+            SetPin(MULPLXC_PIN);
             break;
         case 7:
-            set_pin(MULPLXA_PIN);
-            set_pin(MULPLXB_PIN);
-            set_pin(MULPLXC_PIN);
+            SetPin(MULPLXA_PIN);
+            SetPin(MULPLXB_PIN);
+            SetPin(MULPLXC_PIN);
             break;
     }
 }
@@ -187,7 +182,7 @@ static void SetMulriplexer_State(uint16_t State)
 */
 #define Single_Test     (0)
 int NumPort = 0;
-void ADC_Multiplexer_Get(ADC_TypeDef *ADCx, bool isConvert)
+void ADC_Multiplexer_Get(ADC_TypeDef *ADCx)
 {
 #if(Single_Test == 1)
 SetMulriplexer_State(0);
@@ -202,7 +197,11 @@ ADCStatus.Multiplexer1[0] = ADCx->JDR1;
                 NumPort = 0;
                 break;
             }
+        #if(__configCONVERT_Volts == 1)
+        ADCStatus.Multiplexer1[NumPort] = ((float)ADCx->JDR1) * 3.3 / K_RESOLUTION;
+        #else
         ADCStatus.Multiplexer1[NumPort] = ADCx->JDR1;
+        #endif/*__configCONVERT_Volts*/
         NumPort++;
     }
 #endif /*Single_Test*/
@@ -227,13 +226,6 @@ void AnalogReadRegular(void)
 
 void AnalogReadInjected(ADC_TypeDef *ADCx)
 {
-// Convert in Volts
-#if(__configCONVERT_Volts == 1)
-    ADC_Multiplexer_Get(ADCx,true);
-//////////////////////////////////////////////////////////////////////////
-// Non convert Volts
-#elif(__configCONVERT_Volts == 0)
-    ADC_Multiplexer_Get(ADCx,false);
-#endif /*__configCONVERT_Volts*/
+    ADC_Multiplexer_Get(ADCx);
 }
 #endif /*FIL_ADC*/

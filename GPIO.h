@@ -72,11 +72,11 @@
     #define GPIO       ((unsigned char *) GPIO_BASE)
 
     /*!
-    *   @brief pin_id(PIN_PORT,PIN) - set the custom define with necessary pin address
+    *   @brief GPIOPinID(PIN_PORT,PIN) - set the custom define with necessary pin address
     *       @value PIN_PORT - pins group
     *       @value PIN - pin in selected group
     */
-    #define pin_id(PIN_PORT, PIN) ( (PIN_PORT<<4)|PIN )
+    #define GPIOPinID(PIN_PORT, PIN) ( (PIN_PORT<<4)|PIN )
 
     /*!
     *   @list Offset in local memory map for GPIO
@@ -85,142 +85,191 @@
     #define GPIO_base(pin)        (GPIO_BASE +(pin>>4)*GPIO_offset )
 
     /*!
-    *   @brief pin_mode(pin,mode) - calculate mode for initialization MODER
+    *   @brief GPIOPinMode(pin,mode) - calculate mode for initialization MODER
     *       @value pin - number of pin
     *       @value mode - value of MODER for selected pin
     */
-    #define pin_mode(pin, mode) ((uint32_t) ( mode) <<((pin&0xF)<<1))
+    #define GPIOPinMode(pin, mode) ((uint32_t) ( mode) <<((pin&0xF)<<1))
 
     /*!
-    *   @brief pin_type(pin,type) - calculate type for initialization OTYPER
+    *   @brief GPIOPinType(pin,type) - calculate type for initialization OTYPER
     *       @value pin - number of pin
     *       @value type - value of OTYPER for selected pin
     */
-    #define pin_type(pin, type) ((uint32_t) ( type) <<((pin&0xF)))
+    #define GPIOPinType(pin, type) ((uint32_t) ( type) <<((pin&0xF)))
 
     /*!
-    *   @brief pin_speed(pin,speed) - calculate speed for initialization OSPEEDR
+    *   @brief GPIOPinSpeed(pin,speed) - calculate speed for initialization OSPEEDR
     *       @value pin - number of pin
     *       @value speed - value of OSPEEDR for selected pin
     */
-    #define pin_speed(pin, speed) ((uint32_t) ( speed) <<((pin&0xF)<<1))
+    #define GPIOPinSpeed(pin, speed) ((uint32_t) ( speed) <<((pin&0xF)<<1))
 
     /*!
-    *   @brief pin_pull(pin,pull) - calculate pu/pd for initialization PUPDR
+    *   @brief GPIOPinPull(pin,pull) - calculate pu/pd for initialization PUPDR
     *       @value pin - number of pin
     *       @value pull - value of PUPDR for selected pin
     */
-    #define pin_pull(pin, pull) ((uint32_t) ( pull) <<((pin&0xF)<<1))
+    #define GPIOPinPull(pin, pull) ((uint32_t) ( pull) <<((pin&0xF)<<1))
 
     /*!
-    *   @brief pin_af(pin,af) - calculate mode for initialization AFR
+    *   @brief GPIOPinAF(pin,af) - calculate mode for initialization AFR
     *       @value pin - number of pin
     *       @value af - value of AFR for selected pin
     */
-    #define pin_af(pin,af) ((uint32_t) (af) <<((pin&0x7)<<2))
-
-
-    #define clear_mode(pin) (*((uint32_t *) (GPIO_base(pin))) &= ~pin_mode(pin, 0x3))
-    #define clear_type(pin) (*((uint32_t *) (GPIO_base(pin)+ 0x04)) &= ~pin_type(pin, 0x1))
-    #define clear_speed(pin) (*((uint32_t *) (GPIO_base(pin) + 0x08)) &= ~pin_speed(pin, 0x3))
-    #define clear_pull(pin) (*((uint32_t *) (GPIO_base(pin) + 0x0C)) &= ~pin_pull(pin, 0x3))
-
-    //очиска всех регистров для пина
-    #define clear_conf(pin) (           \
-                 clear_mode(pin);       \
-                 clear_type(pin);       \
-                 clear_speed(pin);      \
-                 clear_pull(pin) ;      )
-
-    //вычисление адреса пина и установка значения
-    #define set_mode(pin,mode)  (*((uint32_t *) (GPIO_base(pin)))       |= pin_mode(pin, mode))
-    #define set_type(pin,type)  (*((uint32_t *) (GPIO_base(pin)+ 0x04)) |= pin_mode(pin, type))
-    #define set_speed(pin,speed)(*((uint32_t *) (GPIO_base(pin)+ 0x08)) |= pin_mode(pin, speed))
-    #define set_pull(pin,pull)  (*((uint32_t *) (GPIO_base(pin)+ 0x0C)) |= pin_mode(pin, pull)))
-
-    //установка всех значений
-    #define set_conf(pin, mode,type,speed,pull) (\
-       set_mode(pin,mode);\
-       set_type(pin,type); \
-       set_speed(pin,speed);\
-       set_pull(pin,pull); \
-         )
+    #define GPIOPinAF(pin,af) ((uint32_t) (af) <<((pin&0x7)<<2))
 
     /*!
-    *   @brief conf_pin(pin, mode) - clear and set MODER on selected pin
+    *   @brief GPIOClearMode(pin) - clear MODER on selected pin
+    *       @value pin
+    */
+    #define GPIOClearMode(pin) (*((uint32_t *) (GPIO_base(pin))) &= ~GPIOPinMode(pin, 0x3))
+
+    /*!
+    *   @brief GPIOClearType(pin) - clear OTYPER on selected pin
+    *       @value pin
+    */
+    #define GPIOClearType(pin) (*((uint32_t *) (GPIO_base(pin)+ 0x04)) &= ~GPIOPinType(pin, 0x1))
+
+    /*!
+    *   @brief GPIOClearSpeed(pin) - clear OSPEEDR on selected pin
+    *       @value pin
+    */
+    #define GPIOClearSpeed(pin) (*((uint32_t *) (GPIO_base(pin) + 0x08)) &= ~GPIOPinSpeed(pin, 0x3))
+
+    /*!
+    *   @brief GPIOClearPULL(pin) - clear PUPDR on selected pin
+    *       @value pin
+    */
+    #define GPIOClearPull(pin) (*((uint32_t *) (GPIO_base(pin) + 0x0C)) &= ~GPIOPinPull(pin, 0x3))
+
+    /*!
+    *   @brief GPIOClearConf(pin) - clear all registers on selected pin
+    *       @value pin
+    */
+    #define GPIOClearConf(pin)         {\
+                 GPIOClearMode(pin);    \
+                 GPIOClearType(pin);    \
+                 GPIOClearSpeed(pin);   \
+                 GPIOClearPull(pin) ;   }
+
+    /*!
+    *   @brief GPIOSetMode(pin, mode) - set MODER on selected pin
     *       @value pin
     *       @value mode - set the mode in register MODER
     */
-    #define conf_mode(pin, mode)  {*((uint32_t *) (GPIO_base(pin)+0x00)) = \
-                    ((*((uint32_t *) (GPIO_base(pin)+0x00))&(~pin_mode(pin, 0x3)))|pin_mode(pin, mode));}
+    #define GPIOSetMode(pin,mode)  (*((uint32_t *) (GPIO_base(pin)))       |= GPIOPinMode(pin, mode))
 
     /*!
-    *   @brief conf_type(pin, type) - clear and set OTYPER on selected pin
+    *   @brief GPIOSetType(pin, type) - set OTYPER on selected pin
     *       @value pin
-    *       @value type - set type of working pin in register OTYPER
+    *       @value type - set the mode in register OTYPER
     */
-    #define conf_type(pin, type)  {*((uint32_t *) (GPIO_base(pin)+0x04)) = \
-      ((*((uint32_t *) (GPIO_base(pin)+0x04))&(~pin_type(pin, 0x1)))|pin_type(pin, type));}
+    #define GPIOSetType(pin,type)  (*((uint32_t *) (GPIO_base(pin)+ 0x04)) |= GPIOPinType(pin, type))
 
     /*!
-    *   @brief conf_speed(pin, speed) - clear and set OSPEEDR on selected pin
+    *   @brief GPIOSetSpeed(pin, speed) - set OSPEEDR on selected pin
     *       @value pin
-    *       @value speed - set speed in register OSPEEDR
+    *       @value speed - set the mode in register OSPEEDR
     */
-    #define conf_speed(pin,speed) {*((uint32_t *) (GPIO_base(pin)+0x08)) = \
-      ((*((uint32_t *) (GPIO_base(pin)+0x08))&(~pin_speed(pin, 0x3)))|pin_speed(pin,speed));}
+    #define GPIOSetSpeed(pin,speed)(*((uint32_t *) (GPIO_base(pin)+ 0x08)) |= GPIOPinSpeed(pin, speed))
 
     /*!
-    *   @brief conf_pull(pin, pull) - clear and set PUPDR on selected pin
+    *   @brief GPIOSetPull(pin, pull) - set PUPDR on selected pin
     *       @value pin
-    *       @value pull - set the pull in register PUPDR
+    *       @value pull - set the mode in register PUPDR
     */
-    #define conf_pull(pin, pull)  {*((uint32_t *) (GPIO_base(pin)+0x0C)) = \
-      ((*((uint32_t *) (GPIO_base(pin)+0x0C))&(~pin_pull(pin, 0x3)))|pin_pull(pin, pull));}
+    #define GPIOSetPull(pin,pull)  (*((uint32_t *) (GPIO_base(pin)+ 0x0C)) |= GPIOPinPull(pin, pull))
 
     /*!
-    *   @brief conf_pin(pin, mode, type, speed, pull) - clear and set properties on selected pin
+    *   @brief GPIOConfPin(pin, mode, type, speed, pull) - set properties on selected pin
     *       @value pin
     *       @value mode - set the mode in register MODER
     *       @value type - set type of working pin in register OTYPER
     *       @value speed - set speed in register OSPEEDR
     *       @value pull - set the pull in register PUPDR
     */
-    #define conf_pin(pin, mode, type, speed, pull) {    \
-        conf_mode(pin, mode)    \
-        conf_type(pin, type)    \
-        conf_speed(pin, speed)  \
-        conf_pull(pin, pull)    }
+    #define GPIOSetConf(pin, mode,type,speed,pull) {\
+       GPIOSetMode(pin,mode);                       \
+       GPIOSetType(pin,type);                       \
+       GPIOSetSpeed(pin,speed);                     \
+       GPIOSetPull(pin,pull);                       }
 
     /*!
-    *   @brief conf_af(pin, af) - clear and set alternate function for necessary mode of pin
+    *   @brief GPIOConfMode(pin, mode) - clear and set MODER on selected pin
+    *       @value pin
+    *       @value mode - set the mode in register MODER
+    */
+    #define GPIOConfMode(pin, mode)  {*((uint32_t *) (GPIO_base(pin)+0x00)) = \
+                    ((*((uint32_t *) (GPIO_base(pin)+0x00))&(~GPIOPinMode(pin, 0x3)))|GPIOPinMode(pin, mode));}
+
+    /*!
+    *   @brief GPIOConfType(pin, type) - clear and set OTYPER on selected pin
+    *       @value pin
+    *       @value type - set type of working pin in register OTYPER
+    */
+    #define GPIOConfType(pin, type)  {*((uint32_t *) (GPIO_base(pin)+0x04)) = \
+      ((*((uint32_t *) (GPIO_base(pin)+0x04))&(~GPIOPinType(pin, 0x1)))|GPIOPinType(pin, type));}
+
+    /*!
+    *   @brief GPIOConfSpeed(pin, speed) - clear and set OSPEEDR on selected pin
+    *       @value pin
+    *       @value speed - set speed in register OSPEEDR
+    */
+    #define GPIOConfSpeed(pin,speed) {*((uint32_t *) (GPIO_base(pin)+0x08)) = \
+      ((*((uint32_t *) (GPIO_base(pin)+0x08))&(~GPIOPinSpeed(pin, 0x3)))|GPIOPinSpeed(pin,speed));}
+
+    /*!
+    *   @brief GPIOConfPull(pin, pull) - clear and set PUPDR on selected pin
+    *       @value pin
+    *       @value pull - set the pull in register PUPDR
+    */
+    #define GPIOConfPull(pin, pull)  {*((uint32_t *) (GPIO_base(pin)+0x0C)) = \
+      ((*((uint32_t *) (GPIO_base(pin)+0x0C))&(~GPIOPinPull(pin, 0x3)))|GPIOPinPull(pin, pull));}
+
+    /*!
+    *   @brief GPIOConfPin(pin, mode, type, speed, pull) - clear and set properties on selected pin
+    *       @value pin
+    *       @value mode - set the mode in register MODER
+    *       @value type - set type of working pin in register OTYPER
+    *       @value speed - set speed in register OSPEEDR
+    *       @value pull - set the pull in register PUPDR
+    */
+    #define GPIOConfPin(pin, mode, type, speed, pull) {\
+        GPIOConfMode(pin, mode)                        \
+        GPIOConfType(pin, type)                        \
+        GPIOConfSpeed(pin, speed)                      \
+        GPIOConfPull(pin, pull)                        }
+
+    /*!
+    *   @brief GPIOConfAF(pin, af) - clear and set alternate function for necessary mode of pin
     *       @value pin
     *       @value af - set alternate function with necessary mode
     */
-    #define conf_af(pin, af)  {*((uint32_t *) (GPIO_base(pin)+0x20+((pin&0x08)>>1))) = \
-                    ((*((uint32_t *) (GPIO_base(pin)+0x20+((pin&0x08)>>1)))&(~pin_af(pin,0xF)))|pin_af(pin,af));}
+    #define GPIOConfAF(pin, af)  {*((uint32_t *) (GPIO_base(pin)+0x20+((pin&0x08)>>1))) = \
+                    ((*((uint32_t *) (GPIO_base(pin)+0x20+((pin&0x08)>>1)))&(~GPIOPinAF(pin,0xF)))|GPIOPinAF(pin,af));}
 
     /*!
-    *   @brief set_pin(pin) - set pin to logic high potential (>= 1.08 V)
+    *   @brief SetPin(pin) - set pin to logic high potential (>= 1.08 V)
     *       @value pin
     */
-    #define set_pin(pin) (*((uint32_t *)((GPIO_base(pin)) + 0x18))= ((uint32_t)1<<((uint32_t)pin&0x0000000f)))
+    #define SetPin(pin) (*((uint32_t *)((GPIO_base(pin)) + 0x18))= ((uint32_t)1<<((uint32_t)pin&0x0000000f)))
 
     /*!
-    *   @brief reset_pin(pin) - reset pin to logic low potential(< 1.08 V)
+    *   @brief ResetPin(pin) - reset pin to logic low potential(< 1.08 V)
     *       @value pin
     */
-    #define reset_pin(pin)  (*((uint32_t *)(GPIO_base(pin) + 0x18))= (uint32_t)1<<(((uint32_t)pin&0xf)+0x00000010))
+    #define ResetPin(pin)  (*((uint32_t *)(GPIO_base(pin) + 0x18))= (uint32_t)1<<(((uint32_t)pin&0xf)+0x00000010))
 
     /*!
-    *   @brief pin_val(pin) - check the input status of selected pin(logical type of value)
+    *   @brief PinVal(pin) - check the input status of selected pin(logical type of value)
     *       @value pin
     */
-    #define pin_val(pin) ((*((uint32_t *)(GPIO_base(pin) + 0x10)))&((uint32_t)1<<(pin&0xf)))
+    #define PinVal(pin) ((*((uint32_t *)(GPIO_base(pin) + 0x10)))&((uint32_t)1<<(pin&0xf)))
 
     /*!
-    *   @brief pin_out(pin) - check the output status of selected pin(logical type of value)
+    *   @brief PinOut(pin) - check the output status of selected pin(logical type of value)
     *       @value pin
     */
-    #define pin_out(pin) ((*((uint32_t *)(GPIO_base(pin) + 0x14)))&((uint32_t)1<<(pin&0xf)))
+    #define PinOut(pin) ((*((uint32_t *)(GPIO_base(pin) + 0x14)))&((uint32_t)1<<(pin&0xf)))
 
