@@ -42,6 +42,10 @@
 */
 #define FIL_FREERTOS              __configUSE_FREERTOS
 #define FIL_FreeRTOS_Source       __configOS_SOURCE
+
+#define EXTERNAL_SSD1306          __configEXT_SSD1306
+#define EXTERNAL_MPU9250          __configEXT_MPU9250
+#define EXTERNAL_ModBus           __configEXT_ModBus
 /*!
 *   Version control
 *
@@ -139,3 +143,23 @@
 #elif(FIL_RTC > 1 || FIL_RTC < 0)
 #error Invalid argument FIL_RTC
 #endif/*FIL_RTC*/
+
+//----------------------------EXTERNAl---------------------------//
+#if(EXTERNAL_SSD1306 == 1)
+    #include "fonts.h"
+    #include "images.h"
+    #include "ssd1306_i2c.h"
+    #include "ssd1306.h"
+#elif(EXTERNAL_SSD1306 > 1 || EXTERNAL_SSD1306 < 0)
+#error Invalid argument EXTERNAL_SSD1306
+#endif /*EXTERNAL_SSD1306*/
+#if(EXTERNAL_MPU9250 == 1)
+    #include "mpu9250.h"
+#elif(EXTERNAL_MPU9250 > 1 || EXTERNAL_MPU9250 < 0)
+#error Invalid argument EXTERNAL_MPU9250
+#endif/*EXTERNAL_MPU9250*/
+#if(EXTERNAL_ModBus == 1)
+    #include "ModBus_conf.h"
+#elif(EXTERNAL_ModBus > 1 || EXTERNAL_ModBus < 0)
+#error Invalid argument EXTERNAL_ModBus
+#endif /*EXTERNAL_ModBus*/

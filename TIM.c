@@ -8,13 +8,6 @@
     *       @note [FIL:TIM] TIM Source file.
     */
 #include "TIM.h"
-struct
-{
-    uint32_t Raw;
-    uint8_t seconds;
-    uint8_t minutes;
-    uint8_t hours;
-}Calendar;
 uint32_t globalTime = 0;
 
 /*!
@@ -24,14 +17,7 @@ uint32_t globalTime = 0;
 
 void SysTick_Handler(void)
 {
-
-//    CalcTimStatus(TIM5);
     globalTime++;
-    if(globalTime % 2000 == 0)
-    {
-    Calendar.Raw = RTC->TR;
-    RTC->ISR &= RTC_ISR_WUTF;
-    }
 }
 #if (FIL_CALC_TIM == 1)
 //---------------------------------------------------------//
@@ -164,7 +150,7 @@ void CalcTimClockSourse(TIM_TypeDef *TIMx)
     *       @arg Duty - duty value
     *       @note [FIL:TIM] Функция предназначена для установления заполнения ШИМ.
     */
-    static bool SetPWM(uint32_t *CCR_Pin,float Duty)
+    bool SetPWM(uint32_t *CCR_Pin,float Duty)
     {
         if(Duty > 1.0) Duty = 1.0;
         if(Duty < -1.0) Duty = -1.0;
@@ -179,69 +165,6 @@ void CalcTimClockSourse(TIM_TypeDef *TIMx)
             return true;
         }
         return false;
-    }
-
-    /*!
-    *   @brief SetVoltage(Motor, Duty) - Установить напряжение на двигатель
-    *       @arg Motor - number of Motor
-    *       @arg Duty - duty value
-    *       @note [FIL:TIM] Функция предназначена для управления двигателями постоянного тока.
-    */
-    bool SetVoltage(float Duty)
-    {
-        if(Duty >= 0)
-        {
-            ResetPin(BTN1_DIR_PIN);
-            SetPWM(BTN1_CCR,Duty);
-            return true;
-        }
-        else
-        {
-            SetPin(BTN1_DIR_PIN);
-            SetPWM(BTN1_CCR,Duty);
-            return true;
-        }
-        return false;
-    }
-
-    void ServoInit(Servomotor* Servo, char servoType,TIM_TypeDef *TIMx, uint16_t ms)
-    {
-        Servo->CCR = &TIMx->CCR1;
-        Servo->ARR = TIMx->ARR;
-        Servo->ms = ms;
-
-        if(servoType == PDI6225MG_300)
-        {
-            Servo->maxAngle = 300;
-            (*Servo).min_ms = 0.5;
-            (*Servo).max_ms = 2.5;
-        }
-        else if(servoType == MG996R)
-        {
-            Servo->maxAngle = 180;
-            (*Servo).min_ms = 1.0;
-            (*Servo).max_ms = 2.0;
-        }
-    }
-
-    void ServoSetRange(Servomotor* Servo, uint16_t min_angle, uint16_t max_angle)
-    {
-        if(min_angle >= max_angle) return;
-        Servo->Range_min = min_angle;
-        Servo->Range_max = max_angle;
-    }
-
-    void SetServoAngle(Servomotor* Servo, uint16_t angle)
-    {
-        if(Servo->Range_min != 0 && angle < Servo->Range_min) angle = Servo->Range_min;
-        if(Servo->Range_max != 0 && angle > Servo->Range_max) angle = Servo->Range_max;
-        if(angle > (*Servo).maxAngle) angle = (*Servo).maxAngle;
-        if(angle < 0)   angle = 0;
-
-        float min_PWM = (float)(((Servo->ARR) * (*Servo).min_ms) / (*Servo).ms);
-        float max_PWM = (float)(((Servo->ARR) * (*Servo).max_ms) / (*Servo).ms);
-
-        *(*Servo).CCR = (uint32_t)(angle * ((max_PWM - min_PWM) / (*Servo).maxAngle) + min_PWM);
     }
 
 static uint32_t startInterval;

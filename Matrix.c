@@ -1,7 +1,7 @@
 #include "Matrix.h"
 
 #if (CALC_MATRIX == 1)
-void matrixCopy(float *m, char rows, char columns, float *new_m)
+void MatrixCopy(float *m, char rows, char columns, float *new_m)
 {
   char i,j;
 
@@ -11,14 +11,14 @@ void matrixCopy(float *m, char rows, char columns, float *new_m)
 }
 
 //Забить в ячейку значение val
-void matrixSetCell(float *m, char rows, char columns, char row, char column, float val)
+void MatrixSetCell(float *m, char rows, char columns, char row, char column, float val)
 {
   *(m+columns*(row-1)+column-1) = val;
 }
 
 
 //Забить все ячейки значением val
-void matrixFill(float *m, char rows, char columns, float val)
+void MatrixFill(float *m, char rows, char columns, float val)
 {
 char i,j;
 
@@ -29,13 +29,13 @@ for(i = 0; i < rows; i++)
 
 
 //Получить значение ячейки
-float matrixGetCell(float *m, char rows, char columns, char row, char column)
+float MatrixGetCell(float *m, char rows, char columns, char row, char column)
 {
   return *(m+columns*(row-1)+column-1);
 }
 
 //Операция перемножения матриц
-void matrixMultiplyM2M(float *m1, char rows1, char columns1, float *m2, char rows2, char columns2, float *new_m)
+void MatrixMultiplyM2M(float *m1, char rows1, char columns1, float *m2, char rows2, char columns2, float *new_m)
 {
 float Sum;
 char i,j,k;
@@ -57,7 +57,7 @@ char i,j,k;
 
 
 //Умножение числа(скаляра S) на матрицу
-void matrixMultiplyS2M(float *m, char rows, char columns, float s, float *new_m)
+void MatrixMultiplyS2M(float *m, char rows, char columns, float s, float *new_m)
 {
 char i,j;
 
@@ -68,7 +68,7 @@ for(i = 0; i < rows; i++)
 
 
 //Сложение/вычитание матриц
-void matrixPlusMinus(float *m1, float *m2, char rows, char columns, signed char sign,float *new_m)
+void MatrixPlusMinus(float *m1, float *m2, char rows, char columns, signed char sign,float *new_m)
 {
 char i,j;
 
@@ -87,7 +87,7 @@ else
 }
 
 
-void matrixTranspose(float *m, char rows, char columns, float *new_m)
+void MatrixTranspose(float *m, char rows, char columns, float *new_m)
 {
 char i,j;
 for(i = 0; i < rows; i++)
@@ -96,7 +96,7 @@ for(i = 0; i < rows; i++)
 }
 
 //Вычисление матрицы алгебраических дополнений
-void matrixCofactor(float *m, char size, float *new_m)
+void MatrixCofactor(float *m, char size, float *new_m)
 {
 //float *buf1 = malloc(sizeof(float) * (size-1) * (size-1));
   float bufxx[10][10];
@@ -144,7 +144,7 @@ while (i<size)
 
 
 //Нахождение определителя квадратной матрицы по методу LU-разложения
-void matrixDet_LU_Transform(float *A, char n,float *out) //необходимо задать исходную матрицу и переменную для LU-матрицы
+void MatrixDet_LU_Transform(float *A, char n,float *out) //необходимо задать исходную матрицу и переменную для LU-матрицы
 {
 float temp = 0;//, *LU = malloc(sizeof(float) * n * n);
 float LU_ [3][3];
@@ -179,29 +179,29 @@ for (i = 0; i < n; i++)
 *out=temp;
 }
 
-void matrixInverse(float *m, char size, float *new_m)
+void MatrixInverse(float *m, char size, float *new_m)
 {
 float buf1[4][4];// = malloc(sizeof(float) * size * size);
 float buf2 [4][4];//= malloc(sizeof(float) * size * size);
 float buf;
 float buf3[3][3];
  float det ;
-  matrixDet_LU_Transform(m, size,&det);
+  MatrixDet_LU_Transform(m, size,&det);
 char i,j;
 
-matrixCofactor(m, size, &buf1[0][0]);
-matrixTranspose(&buf1[0][0], size, size, &buf2[0][0]);
+MatrixCofactor(m, size, &buf1[0][0]);
+MatrixTranspose(&buf1[0][0], size, size, &buf2[0][0]);
 
 for (i = 1; i <= size; i++)
   for (j = 1; j <= size; j++)
     {
-      buf = matrixGetCell(&buf1[0][0], size, size, i, j)/det;
-      matrixSetCell((float*)buf3, size, size, i, j, buf);
+      buf = MatrixGetCell(&buf1[0][0], size, size, i, j)/det;
+      MatrixSetCell((float*)buf3, size, size, i, j, buf);
     }
-matrixTranspose(&buf3[0][0], size, size, new_m);
+MatrixTranspose(&buf3[0][0], size, size, new_m);
 }
 
-TVector subtraction( TVector a,  TVector b)
+TVector Subtraction( TVector a,  TVector b)
 {
      TVector result   ;
   result.x = a.x - b.x;
@@ -209,7 +209,7 @@ TVector subtraction( TVector a,  TVector b)
     return result;
 }
 
-TVector addition( TVector a,  TVector b)
+TVector Addition( TVector a,  TVector b)
 {
      TVector result   ;
   result.x = a.x + b.x;
@@ -217,7 +217,7 @@ TVector addition( TVector a,  TVector b)
     return result;
 }
 
-TVector normalization( TVector a, float len)
+TVector Normalization( TVector a, float len)
 {
      TVector result   ;
   float mod = pow(a.x * a.x + a.y * a.y, 0.5) ;
@@ -230,7 +230,7 @@ TVector normalization( TVector a, float len)
     return result;
 }
 
-TVector scale( TVector a, float k)
+TVector Scale( TVector a, float k)
 {
   TVector result   ;
   result.x = a.x * k;
@@ -238,7 +238,7 @@ TVector scale( TVector a, float k)
   return result;
 }
 
-float mod( TVector a)
+float Mod( TVector a)
 {
   return pow(a.x * a.x + a.y * a.y, 0.5);
 }

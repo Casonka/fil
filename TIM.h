@@ -226,27 +226,7 @@ void CalcTimStatus(TIM_TypeDef *TIMx);
     */
 void CalcTimFrequency(TIM_TypeDef *TIMx, uint16_t freq);
 
-bool SetVoltage(float Duty);
-
-#define PDI6225MG_300   0
-#define MG996R          1
-
-typedef struct
-{
-    volatile uint32_t *CCR,
-                       ARR;
-    uint16_t  ms;
-    float     min_ms,
-              max_ms;
-    uint16_t maxAngle;
-    uint16_t Range_min, Range_max;
-} Servomotor;
-
-void ServoInit(Servomotor* Servo, char servoType, TIM_TypeDef *TIMx, uint16_t ms);
-
-void ServoSetRange(Servomotor* Servo, uint16_t min_angle, uint16_t max_angle);
-
-void SetServoAngle(Servomotor* Servo, uint16_t angle);
+bool SetPWM(uint32_t *CCR_Pin,float Duty);
 
 bool delay_ms(uint32_t ticks);
 

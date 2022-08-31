@@ -79,7 +79,8 @@
 #define I2CStart(I2C)             { I2C->CR1 |= I2C_CR1_START;}
 #define I2CStop(I2C)              { I2C->CR1 |= I2C_CR1_STOP;}
 #define SetI2CAsk(I2C)            { I2C->CR1 |= I2C_CR1_ACK;}
-#define I2CSendData(I2C,DATA,DIR)  (DIR == 1) ? (I2C->DR = ((DATA << 1) & ~I2C_OAR1_ADD0)) : (I2C->DR = ((DATA << 1) | I2C_OAR1_ADD0))
+#define I2CSendData(I2C,DATA,DIR) (DIR == 1) ? (I2C->DR = ((DATA << 1) & ~I2C_OAR1_ADD0)) : (I2C->DR = ((DATA << 1) | I2C_OAR1_ADD0))
+#define I2CSendCommand(I2C,DATA)  (I2C->DR = DATA)
 //---------------------------------------Reset state---------------------------------------------------//
 #define SetI2CMasterModeSlow(I2C) (I2C->CCR &= (~I2C_CCR_FS))
 #define SetI2CPeriphDisable(I2C)  (I2C->CR1 &= (~I2C_CR1_PE))

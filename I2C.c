@@ -113,9 +113,12 @@ return SuccessTransfer;
 
 uint8_t I2C_SingleRead(I2C_TypeDef* I2Cx)
 {
-    uint16_t SuccessRead = 0;
+    uint8_t SuccessRead = 0;
 
+    while(!I2CDataNotEmptyEvent(I2Cx)) {}
+    SuccessRead = I2Cx->DR;
 
+    I2CStop(I2Cx);
 return SuccessRead;
 }
 
