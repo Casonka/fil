@@ -1,6 +1,6 @@
 #include "Robot_tasks.h"
 
-#if (FIL_FREERTOS == 1)
+
 
 void vApplicationTickHook(void)
 {
@@ -32,6 +32,8 @@ void vApplicationMallocFailedHook( void )
 {
 
 }
+
+
 
 void vBlinkTest(void *pvParameters)
 {

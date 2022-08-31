@@ -197,6 +197,7 @@
 #if (FIL_CALC_TIM == 1)
 //---------------------------------------Calculating---------------------------------------------------//
 struct {
+    char Timer[5];
     uint32_t SourseClock;
     float DutyCH1;
     float DutyCH2;

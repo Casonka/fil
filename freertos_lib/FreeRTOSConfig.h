@@ -29,6 +29,7 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 #include "stm32f4xx.h"
+
 /*-----------------------------------------------------------
  * Application specific definitions.
  *

@@ -46,7 +46,6 @@
  *     in FreeRTOS/source/stdint.readme for more information.
  */
 #include <stdint.h>     /* READ COMMENT ABOVE. */
-
 /* *INDENT-OFF* */
 #ifdef __cplusplus
     extern "C" {
@@ -55,7 +54,6 @@
 
 /* Application specific configuration options. */
 #include "FreeRTOSConfig.h"
-
 /* Basic FreeRTOS definitions. */
 #include "projdefs.h"
 
@@ -1341,5 +1339,4 @@ typedef StaticStreamBuffer_t StaticMessageBuffer_t;
     }
 #endif
 /* *INDENT-ON* */
-
 #endif /* INC_FREERTOS_H */
