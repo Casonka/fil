@@ -37,6 +37,7 @@
 #include "queue.h"
 #include "timers.h"
 
+#ifdef OS_INCLUDE
 #if ( INCLUDE_xTimerPendFunctionCall == 1 ) && ( configUSE_TIMERS == 0 )
     #error configUSE_TIMERS must be set to 1 to make the xTimerPendFunctionCall() function available.
 #endif
@@ -1142,3 +1143,4 @@
  * to include software timer functionality.  If you want to include software timer
  * functionality then ensure configUSE_TIMERS is set to 1 in FreeRTOSConfig.h. */
 #endif /* configUSE_TIMERS == 1 */
+#endif /*OS_INCLUDE*/

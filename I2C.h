@@ -81,6 +81,7 @@
 #define SetI2CAsk(I2C)            { I2C->CR1 |= I2C_CR1_ACK;}
 #define I2CSendData(I2C,DATA,DIR) (DIR == 1) ? (I2C->DR = ((DATA << 1) & ~I2C_OAR1_ADD0)) : (I2C->DR = ((DATA << 1) | I2C_OAR1_ADD0))
 #define I2CSendCommand(I2C,DATA)  (I2C->DR = DATA)
+#define I2C_Receive(I2C,Buf)      (Buf = I2C->DR)
 //---------------------------------------Reset state---------------------------------------------------//
 #define SetI2CMasterModeSlow(I2C) (I2C->CCR &= (~I2C_CCR_FS))
 #define SetI2CPeriphDisable(I2C)  (I2C->CR1 &= (~I2C_CR1_PE))
@@ -97,6 +98,7 @@
 #define I2CMasterModeEvent(I2C)        ((I2C->SR2 & I2C_SR2_MSL) == 1)
 #define I2CDataEmptyEvent(I2C)         (((I2C->SR1 & I2C_SR1_TXE) >> 7) == 1)
 #define I2CDataNotEmptyEvent(I2C)      (((I2C->SR1 & I2C_SR1_RXNE) >> 6) == 1)
+#define I2CByteTranferedEvent(I2C)     (((I2C->SR1 & I2C_SR1_BTF) >> 2) == 1)
 
 #ifndef __configI2C_TIMEOUT
 #define __configI2C_TIMEOUT					10000
@@ -109,6 +111,9 @@
 */
 void I2C_ClearAllStats(I2C_TypeDef* I2Cx);
 
+uint8_t I2C_MemoryWriteSingle(I2C_TypeDef* I2Cx, uint8_t address, uint8_t Register, uint8_t Value);
+uint8_t I2C_MemoryReadSingle(I2C_TypeDef* I2Cx, uint8_t address, uint8_t Register);
+uint8_t I2C_MemoryReadMultiple(I2C_TypeDef* I2Cx, uint8_t address, uint8_t Register, uint8_t* Bus, uint16_t length);
 /*!
 *   @brief I2C_SingleSend(I2C_TypeDef* I2Cx, uint8_t Byte, bool IsWrite) - Single Write on Bus IIC
 *       @arg I2Cx - number of target I2C

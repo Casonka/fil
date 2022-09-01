@@ -32,6 +32,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#if(FIL_FREERTOS == 1)
 #ifndef __VFP_FP__
     #error This port can only be used when the project options are configured to enable hardware floating point support.
 #endif
@@ -781,4 +782,4 @@ static void vPortEnableVFP( void )
     }
 
 #endif /* configASSERT_DEFINED */
-
+#endif

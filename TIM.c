@@ -17,6 +17,7 @@ uint32_t globalTime = 0;
 
 void SysTick_Handler(void)
 {
+
     globalTime++;
 }
 #if (FIL_CALC_TIM == 1)
@@ -94,8 +95,6 @@ void CalcTimStatus(TIM_TypeDef *TIMx)
     TIMStatus.Timer[0] = 'T';
     TIMStatus.Timer[1] = 'I';
     TIMStatus.Timer[2] = 'M';
-    TIMStatus.Timer[3] = 0x30;
-    TIMStatus.Timer[4] = ' ';
     CalcTimClockSourse(TIMx);
 
     TIMStatus.DutyCH1 = ((uint32_t)(((float)TIMx->CCR1) / TIMx->ARR * 100));
@@ -128,15 +127,15 @@ void CalcTimFrequency(TIM_TypeDef *TIMx, uint16_t freq)
 void CalcTimClockSourse(TIM_TypeDef *TIMx)
 {
     CalcRCCClocks();
-   TIMStatus.Timer[3] += (TIMx == TIM1) ? 0x1 :
-                         (TIMx == TIM2) ? 0x2 :
-                         (TIMx == TIM3) ? 0x3 :
-                         (TIMx == TIM4) ? 0x4 :
-                         (TIMx == TIM5) ? 0x5 :
-                         (TIMx == TIM6) ? 0x6 :
-                         (TIMx == TIM7) ? 0x7 :
-                         (TIMx == TIM8) ? 0x8 :
-                         (TIMx == TIM9) ? 0x9 : 0x1 ;
+    TIMStatus.Timer[3] = (TIMx == TIM1) ? 0x31 :
+                         (TIMx == TIM2) ? 0x32 :
+                         (TIMx == TIM3) ? 0x33 :
+                         (TIMx == TIM4) ? 0x34 :
+                         (TIMx == TIM5) ? 0x35 :
+                         (TIMx == TIM6) ? 0x36 :
+                         (TIMx == TIM7) ? 0x37 :
+                         (TIMx == TIM8) ? 0x38 :
+                         (TIMx == TIM9) ? 0x39 : 0x31 ;
     TIMStatus.Timer[4] = (TIMx == TIM10) ? 0x30 :
                          (TIMx == TIM11) ? 0x31 :
                          (TIMx == TIM12) ? 0x32 :

@@ -38,6 +38,7 @@
 #include "timers.h"
 #include "event_groups.h"
 
+#ifdef OS_INCLUDE
 /* Lint e961, e750 and e9021 are suppressed as a MISRA exception justified
  * because the MPU ports require MPU_WRAPPERS_INCLUDED_FROM_API_FILE to be defined
  * for the header files above, but not in this file, in order to generate the
@@ -769,3 +770,4 @@ static BaseType_t prvTestWaitCondition( const EventBits_t uxCurrentEventBits,
 
 #endif /* configUSE_TRACE_FACILITY */
 /*-----------------------------------------------------------*/
+#endif /*OS_INCLUDE*/

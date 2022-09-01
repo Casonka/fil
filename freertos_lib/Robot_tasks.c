@@ -1,7 +1,5 @@
 #include "Robot_tasks.h"
 
-
-
 void vApplicationTickHook(void)
 {
     /*!
@@ -27,7 +25,6 @@ void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName )
 *
 */
 }
-
 void vApplicationMallocFailedHook( void )
 {
 

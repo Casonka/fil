@@ -43,7 +43,9 @@ void I2C3_ER_IRQHandler(void)
 }
 
 static uint32_t I2C_timeout;
-
+#ifndef __configI2C_TIMEOUT
+    #define __configI2C_TIMEOUT         (3000)
+#endif/*__configI2C_TIMEOUT*/
 /*!
 *   @brief I2C_ClearAllStats(I2C_TypeDef* I2Cx) - Clear all active flags and parameters
 *       @arg I2Cx - number of target I2C
@@ -51,13 +53,218 @@ static uint32_t I2C_timeout;
 */
 void I2C_ClearAllStats(I2C_TypeDef* I2Cx)
 {
-    I2Cx->CR1 = 0;
-    I2Cx->DR = 0;
     (void)I2Cx->SR1;
     I2Cx->SR1 = 0;
     (void)I2Cx->SR2;
     I2Cx->SR2 = 0;
 }
+
+uint8_t I2C_MemoryWriteSingle(I2C_TypeDef* I2Cx, uint8_t address, uint8_t Register, uint8_t Value)
+{
+    I2C_ClearAllStats(I2Cx);
+
+    I2CStart(I2Cx);
+    SetI2CAsk(I2Cx);
+//-------------------Wait SB-------------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CStartBitEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2CSendData(I2Cx,address,1);
+//-------------------Wait TXe&ADDR-------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CAddressSentEvent(I2Cx) || !I2CDataEmptyEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2C_ClearAllStats(I2Cx);
+    I2CSendCommand(I2Cx,Register);
+//----------------Wait TXe---------------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CDataEmptyEvent(I2Cx))
+    {
+        if (--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2CSendCommand(I2Cx,Value);
+//----------------Wait TXe&BTF-----------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CDataEmptyEvent(I2Cx) || !I2CByteTranferedEvent(I2Cx))
+    {
+        if (--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2CStop(I2Cx);
+    ResetI2CAsk(I2Cx);
+    return Value;
+}
+
+uint8_t I2C_MemoryReadMultiple(I2C_TypeDef* I2Cx, uint8_t address, uint8_t Register, uint8_t* Bus, uint16_t length)
+{
+    I2C_ClearAllStats(I2Cx);
+
+    I2CStart(I2Cx);
+    SetI2CAsk(I2Cx);
+//-------------------Wait SB-------------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CStartBitEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2CSendData(I2Cx,address,1);
+//-------------------Wait TXe&ADDR-------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CAddressSentEvent(I2Cx) || !I2CDataEmptyEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2C_ClearAllStats(I2Cx);
+
+    I2CSendCommand(I2Cx,Register);
+
+    I2CStart(I2Cx);
+//-------------------Wait SB-------------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CStartBitEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2CSendData(I2Cx,address,0);
+//-------------------Wait RXNe&ADDR------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    I2C_ClearAllStats(I2Cx);
+    while(!I2CAddressSentEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+    (void)I2Cx->SR1;
+    (void)I2Cx->SR2;
+
+    uint16_t SuccessRead = 0;
+    for(int i = 0; i <= length; i++)
+    {
+
+        if(i == (length - 1)) ResetI2CAsk(I2Cx);
+        I2C_timeout = __configI2C_TIMEOUT;
+        while(!I2CDataNotEmptyEvent(I2Cx))
+        {
+            if(--I2C_timeout == 0x00)
+            {
+                break;
+            }
+        }
+        if(!I2CDataNotEmptyEvent(I2Cx)) continue;
+        Bus[i] = I2Cx->DR;
+        SuccessRead++;
+    }
+    I2CStop(I2Cx);
+//---------------------------------------------------//
+    return SuccessRead;
+}
+
+uint8_t I2C_MemoryReadSingle(I2C_TypeDef* I2Cx, uint8_t address, uint8_t Register)
+{
+    uint8_t Bus;
+    I2C_ClearAllStats(I2Cx);
+
+    I2CStart(I2Cx);
+    SetI2CAsk(I2Cx);
+//-------------------Wait SB-------------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CStartBitEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2CSendData(I2Cx,address,1);
+//-------------------Wait TXe&ADDR-------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CAddressSentEvent(I2Cx) || !I2CDataEmptyEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2C_ClearAllStats(I2Cx);
+
+    I2CSendCommand(I2Cx,Register);
+
+    I2CStart(I2Cx);
+//-------------------Wait SB-------------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CStartBitEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+    I2CSendData(I2Cx,address,0);
+//-------------------Wait RXNe&ADDR------------------//
+    I2C_timeout = __configI2C_TIMEOUT;
+    I2C_ClearAllStats(I2Cx);
+    while(!I2CAddressSentEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+    (void)I2Cx->SR1;
+    (void)I2Cx->SR2;
+    I2C_timeout = __configI2C_TIMEOUT;
+    while(!I2CDataNotEmptyEvent(I2Cx))
+    {
+        if(--I2C_timeout == 0x00)
+        {
+            return 0x00;
+        }
+    }
+//---------------------------------------------------//
+
+    ResetI2CAsk(I2Cx);
+    I2CStop(I2Cx);
+    Bus = I2Cx->DR;
+
+    return Bus;
+}
+
 /*!
 *   @brief I2C_SingleSend(I2C_TypeDef* I2Cx, uint8_t Byte, bool IsWrite) - Single Write on Bus IIC
 *       @arg I2Cx - number of target I2C
@@ -69,7 +276,7 @@ void I2C_ClearAllStats(I2C_TypeDef* I2Cx)
 bool I2C_SingleSend(I2C_TypeDef* I2Cx, uint8_t Byte, bool IsWrite)
 {
     I2C_timeout = __configI2C_TIMEOUT;
-//----------------Wait TXNe-----------------------//
+//----------------Wait TXe-----------------------//
     while(!I2CDataEmptyEvent(I2Cx))
     {
         if (--I2C_timeout == 0x00)

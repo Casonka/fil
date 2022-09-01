@@ -27,6 +27,7 @@
 #ifndef CO_ROUTINE_H
 #define CO_ROUTINE_H
 
+
 #ifndef INC_FREERTOS_H
     #error "include FreeRTOS.h must appear in source files before include croutine.h"
 #endif
@@ -65,7 +66,7 @@ typedef struct corCoRoutineControlBlock
  *                               crCOROUTINE_CODE pxCoRoutineCode,
  *                               UBaseType_t uxPriority,
  *                               UBaseType_t uxIndex
- *                             ); 
+ *                             );
  * </pre>
  *
  * Create a new co-routine and add it to the list of co-routines that are
@@ -747,5 +748,6 @@ BaseType_t xCoRoutineRemoveFromEventList( const List_t * pxEventList );
     }
 #endif
 /* *INDENT-ON* */
+
 
 #endif /* CO_ROUTINE_H */

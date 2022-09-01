@@ -116,5 +116,4 @@ typedef void (* TaskFunction_t)( void * );
 #define pdLITTLE_ENDIAN                   pdFREERTOS_LITTLE_ENDIAN
 #define pdBIG_ENDIAN                      pdFREERTOS_BIG_ENDIAN
 
-
 #endif /* PROJDEFS_H */

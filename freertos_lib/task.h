@@ -28,6 +28,7 @@
 #ifndef INC_TASK_H
 #define INC_TASK_H
 
+
 #ifndef INC_FREERTOS_H
     #error "include FreeRTOS.h must appear in source files before include task.h"
 #endif
@@ -3049,4 +3050,5 @@ void vTaskInternalSetTimeOutState( TimeOut_t * const pxTimeOut ) PRIVILEGED_FUNC
     }
 #endif
 /* *INDENT-ON* */
+
 #endif /* INC_TASK_H */

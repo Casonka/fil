@@ -28,6 +28,7 @@
 #include "task.h"
 #include "croutine.h"
 
+#ifdef OS_INCLUDE
 /* Remove the whole file is co-routines are not being used. */
 #if ( configUSE_CO_ROUTINES != 0 )
 
@@ -359,3 +360,4 @@
     }
 
 #endif /* configUSE_CO_ROUTINES == 0 */
+#endif /*OS_INCLUDE*/
