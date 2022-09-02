@@ -25,6 +25,7 @@
     #define SetGPIOE        (RCC->AHB1ENR |= ((uint32_t)(1 << 4)))
     #define SetGPIOH        (RCC->AHB1ENR |= ((uint32_t)(1 << 7)))
 
+    #define ResetGPIOB      (RCC->AHB1RSTR |= (1 << 1))
 #if defined(STM32F40_41xxx) /*--------------STM32F407------------------*/
     #define SetGPIOF        (RCC->AHB1ENR |= ((uint32_t)(1 << 5)))
     #define SetGPIOG        (RCC->AHB1ENR |= ((uint32_t)(1 << 6)))
@@ -68,6 +69,10 @@
     #define SetI2C1         (RCC->APB1ENR |= ((uint32_t)(1 << 21)))
     #define SetI2C2         (RCC->APB1ENR |= ((uint32_t)(1 << 22)))
     #define SetI2C3         (RCC->APB1ENR |= ((uint32_t)(1 << 23)))
+
+    #define ResetI2C1       (RCC->APB1RSTR |= ((uint32_t)(1 << 21)))
+    #define ResetI2C2       (RCC->APB1RSTR |= ((uint32_t)(1 << 22)))
+    #define ResetI2C3       (RCC->APB1RSTR |= ((uint32_t)(1 << 23)))
     /*!
     *   @list ADC
     */

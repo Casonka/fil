@@ -191,7 +191,6 @@ ADCStatus.Multiplexer1[0] = ADCx->JDR1;
     while(true)
     {
         SetMulriplexer_State(NumPort);
-        if( delay_ms(4) == false) return;
         if(NumPort == 8)
             {
                 NumPort = 0;

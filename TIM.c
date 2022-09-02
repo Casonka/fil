@@ -75,14 +75,12 @@ void TIM8_UP_TIM13_IRQHandler(void)
 ResetTimSR(TIM13);
 }
 #endif /*STM32F40_41xxx*/
-uint32_t startTick = 0;
-bool delay_ms(uint32_t ticks)
+static uint32_t startTick;
+void delay_ms(uint32_t ticks)
 {
-    if(ticks == 0) return true;
-    if(startTick == 0) startTick = globalTime;
-    if((globalTime - startTick) < (ticks)) { return false;}
-    else startTick  = 0;
-    return true;
+    if(ticks == 0) return;
+    startTick = globalTime;
+    while((globalTime - startTick) < ticks) {}
 }
 
     /*!

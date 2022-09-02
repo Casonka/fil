@@ -2,10 +2,20 @@
     *   --------------------------------------------------------------------------
     *                ///Fast Initialization Library Configuration File\\\
     *   --------------------------------------------------------------------------
-    *   @author RCR group developers - Caska.
-    *   @date 28/06/2022 - last update version FIL STM32
+    *   @author RCR group developers
+    *   @date 02/06/2022 - last update version FIL STM32
     *
     */
+
+// Example for register documentation
+/*!
+*    @brief
+*    @arg
+*    @arg
+*    @arg
+*        @attention
+*    @return
+*/
 
 /*!
 *   FIL STM32 Driver

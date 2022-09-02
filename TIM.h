@@ -229,7 +229,7 @@ void CalcTimFrequency(TIM_TypeDef *TIMx, uint16_t freq);
 
 bool SetPWM(uint32_t *CCR_Pin,float Duty);
 
-bool delay_ms(uint32_t ticks);
+void delay_ms(uint32_t ticks);
 
 uint32_t StartMeas(void);
 

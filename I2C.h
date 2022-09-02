@@ -99,6 +99,8 @@
 #define I2CDataEmptyEvent(I2C)         (((I2C->SR1 & I2C_SR1_TXE) >> 7) == 1)
 #define I2CDataNotEmptyEvent(I2C)      (((I2C->SR1 & I2C_SR1_RXNE) >> 6) == 1)
 #define I2CByteTranferedEvent(I2C)     (((I2C->SR1 & I2C_SR1_BTF) >> 2) == 1)
+#define I2CBusBusyEvent(I2C)           (((I2C->SR2 & I2C_SR2_BUSY) >> 1) == 1)
+
 
 #ifndef __configI2C_TIMEOUT
 #define __configI2C_TIMEOUT					10000
@@ -144,12 +146,16 @@ uint8_t I2C_SingleRead(I2C_TypeDef* I2Cx);
 *       @return success received bytes
 */
 uint16_t I2C_MultipleRead(I2C_TypeDef* I2Cx, uint8_t *bufBytes);
+
+void I2C_RestoreConnection(I2C_TypeDef* I2Cx);
 #if(CALC_I2C_SCANNING == 1)
     #if(__configI2C_FindListSize > 0 )
     struct
     {
         uint16_t Devices[__configI2C_FindListSize];
     }I2CStatus;
+
+
 
     uint8_t I2CFindDevices(I2C_TypeDef* I2Cx);
     #endif /*__configI2C_FindListSize*/
