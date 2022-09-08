@@ -285,7 +285,6 @@ uint8_t I2C_MemoryReadSingle(I2C_TypeDef* I2Cx, uint8_t address, uint8_t Registe
         }
     }
 //---------------------------------------------------//
-
     ResetI2CAsk(I2Cx);
     I2CStop(I2Cx);
     Bus = I2Cx->DR;

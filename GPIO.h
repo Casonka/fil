@@ -262,6 +262,14 @@
     #define ResetPin(pin)  (*((uint32_t *)(GPIO_base(pin) + 0x18))= (uint32_t)1<<(((uint32_t)pin&0xf)+0x00000010))
 
     /*!
+    *   @brief TooglePin(pin) - toogle pin to logic low/high potential
+    *       @value pin
+    */
+    #define TooglePin(pin)                      {\
+                if(PinVal(pin)) ResetPin(pin);   \
+                else SetPin(pin);                }
+
+    /*!
     *   @brief PinVal(pin) - check the input status of selected pin(logical type of value)
     *       @value pin
     */

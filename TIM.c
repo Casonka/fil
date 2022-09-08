@@ -2,7 +2,7 @@
     *   --------------------------------------------------------------------------
     *                       ///TIM Source file\\\
     *   --------------------------------------------------------------------------
-    *   @author RCR group developers - Caska, Evgeny Garanin
+    *   @author RCR group developers
     *   @date 13/07/2022 - last update version TIM
     *
     *       @note [FIL:TIM] TIM Source file.
@@ -83,6 +83,12 @@ void delay_ms(uint32_t ticks)
     while((globalTime - startTick) < ticks) {}
 }
 
+void delay_sec(uint32_t ticks)
+{
+    if(ticks == 0) return;
+    startTick = globalTime / 1000;
+    while(((globalTime / 1000) - startTick) < ticks) {}
+}
     /*!
     *   @brief CalcTimStatus(TIM_TypeDef *TIMx) - Calculating Timer Status
     *       @arg TIMx - number of timer
@@ -107,14 +113,28 @@ void CalcTimStatus(TIM_TypeDef *TIMx)
     *       @arg freq - necessary frequency
     *           @note [FIL:TIM] Функция для расчета частоты работы таймераы
     */
-void CalcTimFrequency(TIM_TypeDef *TIMx, uint16_t freq)
+void CalcTimFrequency(TIM_TypeDef *TIMx, uint32_t freq)
 {
     CalcTimClockSourse(TIMx);
 
-    TIMx->PSC = (freq >= 100) ? ((uint32_t)(TIMStatus.SourseClock / 1000000)) :
+    TIMx->PSC = (freq <= 100) ? ((uint32_t)(TIMStatus.SourseClock / 10000)) :
+                (freq >= 100) ? ((uint32_t)(TIMStatus.SourseClock / 1000000)) :
                 (freq >= 10000) ? ((uint32_t)(TIMStatus.SourseClock / 10000)) : ((uint32_t)(TIMStatus.SourseClock / 100000));
     TIMx->ARR = ((uint32_t)(TIMStatus.SourseClock / ((TIMx->PSC)* freq)));
     TIMx->PSC -= 1;
+}
+
+void CalcTimPulseLength(TIM_TypeDef* TIMx, uint8_t channel, uint8_t Degree, uint16_t Length)
+{
+    uint32_t divider = 0;
+    if(Degree >= 3 && Degree < 6) { CalcTimFrequency(TIMx, 1); divider = 1000; }
+    if(Degree >= 6 && Degree < 9) { CalcTimFrequency(TIMx, 1000); divider = 1000000; }
+    if(Degree >= 9 && Degree < 12) { CalcTimFrequency(TIMx, 1000000); divider = 1000000000; }
+
+    if(channel == 1) TIMx->CCR1 = (((float)(TIMx->ARR)) * (((float)(Length)) / divider));
+    if(channel == 2) TIMx->CCR2 = (((float)(TIMx->ARR)) * (((float)(Length)) / divider));
+    if(channel == 3) TIMx->CCR3 = (((float)(TIMx->ARR)) * (((float)(Length)) / divider));
+    if(channel == 4) TIMx->CCR4 = (((float)(TIMx->ARR)) * (((float)(Length)) / divider));
 }
 
     /*!
@@ -196,4 +216,5 @@ static uint32_t endInterval;
         ResetPin(LED_PIN);
         return endInterval = (globalTime - startInterval);
     }
+
 #endif /*FIL_CALC_TIM*/

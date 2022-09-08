@@ -54,7 +54,9 @@
         TimStart(TIM);                                                \
         SetTimMainOutput(TIM);                                        \
         ResetTimCCR1(TIM);                                            \
-        ResetTimCCR2(TIM);                                            }
+        ResetTimCCR2(TIM);                                            \
+        ResetTimCCR3(TIM);                                            \
+        ResetTimCCR4(TIM);                                            }
 
     /*!
     *   @brief TimPIDConfigureAutomatic(TIM,frequency) - configuration timer in calculating mode (auto-mode)
@@ -67,6 +69,17 @@
         CalcTimFrequency(TIM,FREQUENCY);                \
         SetTimUpdateInterrupt(TIM);                     \
         TimStart(TIM);                                  }
+
+    #define TimOnePulseConfigure(TIM,ch1,ch2,POLAR1,ch3,ch4,POLAR2) {\
+        ConfChannelsTim(TIM,POLAR1,POLAR2,ch1,ch2,ch3,ch4);          \
+        SetTimOnePulseMode(TIM);                                     \
+        SetTimMainOutput(TIM);                                       }
+
+    #define TimGeneratePulse(TIM,CHANNEL,DIV,Length)  {\
+        CalcTimPulseLength(TIM,CHANNEL,DIV,Length);    \
+        ResetTimCNT(TIM);                              \
+        TimStart(TIM);                                 }
+
 #endif
     /*!
     *   @brief TimEncoderConfigure(TIM) - configuration timer with encoder interface
@@ -221,20 +234,25 @@ void CalcTimClockSourse(TIM_TypeDef *TIMx);
 void CalcTimStatus(TIM_TypeDef *TIMx);
 
     /*!
-    *   @brief CalcTimFrequency(TIM_TypeDef *TIMx, uint16_t freq) - Calculating Timer frequency
+    *   @brief CalcTimFrequency(TIM_TypeDef *TIMx, uint32_t freq) - Calculating Timer frequency
     *       @arg TIMx - number of timer
     *       @arg freq - necessary frequency
     */
-void CalcTimFrequency(TIM_TypeDef *TIMx, uint16_t freq);
+void CalcTimFrequency(TIM_TypeDef* TIMx, uint32_t freq);
+
+void CalcTimPulseLength(TIM_TypeDef* TIMx, uint8_t channel, uint8_t Degree, uint16_t Length);
 
 bool SetPWM(uint32_t *CCR_Pin,float Duty);
 
 void delay_ms(uint32_t ticks);
 
+void delay_sec(uint32_t ticks);
+
 uint32_t StartMeas(void);
 
 uint32_t EndMeas(void);
 
+uint32_t Meas(void* function);
 #elif(FIL_CALC_TIM > 1)
 #error Invalid argument FIL_CALC_TIM
 #endif /*FIL_CALC_TIM*/
