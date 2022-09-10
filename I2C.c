@@ -356,19 +356,26 @@ uint8_t I2C_SingleRead(I2C_TypeDef* I2Cx)
 return SuccessRead;
 }
 
-uint16_t I2C_MultipleRead(I2C_TypeDef* I2Cx, uint8_t *bufBytes)
+uint16_t I2C_MultipleRead(I2C_TypeDef* I2Cx, uint8_t *Buffer, uint8_t Length)
 {
-    uint16_t SuccessRead = sizeof(bufBytes);
+    uint8_t SuccessRead = 0;
 
-    for(int i = 0; i < 14; i++)
+    for(int i = 0; i <= length; i++)
     {
-        if(i == (sizeof(bufBytes) - 1)) ResetI2CAsk(I2Cx);
-        while(!I2CDataNotEmptyEvent(I2Cx))  {}
-        bufBytes[i] = I2Cx->DR;
+        if(i == (length - 1)) ResetI2CAsk(I2Cx);
+        I2C_timeout = __configI2C_TIMEOUT;
+        while(!I2CDataNotEmptyEvent(I2Cx))
+        {
+            if(--I2C_timeout == 0x00)
+            {
+                break;
+            }
+        }
+        if(!I2CDataNotEmptyEvent(I2Cx)) continue;
+        *Bus++ = I2Cx->DR;
         SuccessRead++;
     }
     I2CStop(I2Cx);
-return SuccessRead;
 }
 
 /*!
