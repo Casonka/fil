@@ -27,7 +27,7 @@ Fast Initialization Library(FIL) for STM32 microcontrollers
 Архитектуру созданного продукта представляет собой взаимодействие элементов, как на рисунке ниже. Основной участок взаимодействия пользователя и продукта это карта портов и конфигурационный файл, они участвуют в процессе сборки проекта и предоставлении необходимого набор API функций ядра библиотеки FIL. Основополагающий фактор - наличие периферийной библиотеки [CMSIS](https://developer.arm.com/tools-and-software/embedded/cmsis), определения которой используются ядром и самим пользователем.
 
 <p align="center"> 
-<img src=https://github.com/Casonka/FIL/blob/installation/images/Architecture.jpg>
+<img src=https://github.com/Casonka/FIL/blob/main/images/Architecture.jpg>
 </p>
 
 На данный момент проект поддерживает линейки контроллеров, прилагаемых в таблице. Основная целевая группа проекта - архитектура линейки ARM Cortex-M, на которой в большинстве реализованы микроконтроллеры STM32. В частности, планируется оптимизация под архитектуру Cortex M4 и M3.
@@ -52,6 +52,6 @@ Fast Initialization Library(FIL) for STM32 microcontrollers
 
 |  | Название среды | Ссылка на инструкцию по установке |
 | ------ | ------ | ------ |
-| <img width=30% src=https://github.com/Casonka/FIL/blob/installation/images/EmBitz.png> | EmBitz 2.30+ | [Embitz установка](https://github.com/Casonka/FIL/tree/Embitz-deploy) |
-| <img width=30% src=https://github.com/Casonka/FIL/blob/installation/images/Eclipse.png> | Eclipse Embedded | [Eclipse установка](https://github.com/Casonka/FIL/tree/Eclipse-deploy) |
+| <img width=30% src=https://github.com/Casonka/FIL/blob/main/images/EmBitz.png> | EmBitz 2.30+ | [Embitz установка](https://github.com/Casonka/FIL/tree/Embitz-deploy) |
+| <img width=30% src=https://github.com/Casonka/FIL/blob/main/images/Eclipse.png> | Eclipse Embedded | [Eclipse установка](https://github.com/Casonka/FIL/tree/Eclipse-deploy) |
 
