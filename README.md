@@ -22,6 +22,10 @@ Fast Initialization Library(FIL) for STM32 microcontrollers
 
 <h3>Архитектурное строение библиотеки</h3>
 
+<p align="center"> 
+<img src=https://github.com/Casonka/FIL/blob/installation/images/Architecture.jpg>
+</p>
+
 
 ## Инструкция по установке (Embitz)
 
