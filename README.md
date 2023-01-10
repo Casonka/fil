@@ -52,6 +52,6 @@ Fast Initialization Library(FIL) for STM32 microcontrollers
 
 |  | Название среды | Ссылка на инструкцию по установке |
 | ------ | ------ | ------ |
-| <img width=30% src=https://github.com/Casonka/FIL/blob/installation/images/EmBitz.png> | EmBitz 2.30+ | [Embitz установка]() |
-| <img width=30% src=https://github.com/Casonka/FIL/blob/installation/images/Eclipse.png> | Eclipse Embedded | [Eclipse установка]() |
+| <img width=30% src=https://github.com/Casonka/FIL/blob/installation/images/EmBitz.png> | EmBitz 2.30+ | [Embitz установка](https://github.com/Casonka/FIL/tree/Embitz-deploy) |
+| <img width=30% src=https://github.com/Casonka/FIL/blob/installation/images/Eclipse.png> | Eclipse Embedded | [Eclipse установка](https://github.com/Casonka/FIL/tree/Eclipse-deploy) |
 
