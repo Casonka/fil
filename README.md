@@ -90,7 +90,7 @@ Fast Initialization Library(FIL) for STM32 microcontrollers
 1) Если обратиться к файлу-селектору конфигураций, то можно заметить параметр, отвечающий за подключенный проект. 
 
 <p align="center"> 
-<img src=https://github.com/Casonka/FIL/blob/main/images/9.jpg>
+<img src=https://github.com/Casonka/FIL/blob/main/images/Selector.jpg>
 </p>
 
 По умолчанию, включена тестовая конфигурация, поэтому если вы нацелены создать собственную, следуйте следующим указаниям:
