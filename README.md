@@ -3,7 +3,7 @@
 Fast Initialization Library(FIL) for STM32 microcontrollers
 </p></h1>
 <h1><p align="center"> 
-Библиотека быстрой инициализации для микроконтроллеров STM32 на базе программной IDE EmBitz
+Библиотека быстрой инициализации для микроконтроллеров STM32
 </p></h1>
 <h3><p align="center"> 
 
