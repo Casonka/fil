@@ -6,6 +6,8 @@ Fast Initialization Library(FIL) for STM32 microcontrollers
 Библиотека быстрой инициализации для микроконтроллеров STM32
 </p></h1>
 <h3><p align="center"> 
+<img width=40% src = https://github.com/Casonka/FIL/blob/main/images/FIL.png>
+</p></h3>
 
 ## Что такое FIL ?
 
