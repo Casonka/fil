@@ -123,7 +123,7 @@ Fast Initialization Library(FIL) for STM32 microcontrollers
 Для подключения необходимого драйвера необходимо объявить параметр с приставкой __config в вашем конфигурационном файле. Заходим в файл Configuration.h и добавляем параметр в секцию с optional parameters, как на фрагменте кода ниже. Значение аргумента делать равным 1, если вам требуется указанная библиотека, для временного отключения измените значение на 0.
 
 ```sh
-/*! Place for new optional settings */
+/*! Place new optional settings */
 
 #define __configEXT_SSD1306               1
 ```
